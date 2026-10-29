@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#152c28">
+<title>Four Pillars — Life Balance Tracker</title>
+<style>
+:root{--bg:#f5f6f2;--card:#fff;--ink:#182522;--muted:#64716c;--line:#e3e8e2;--green:#245c4a;--green2:#dcefe5;--gold:#8b6420;--goldbg:#f8efd9;--blue:#315b8e;--bluebg:#e5eefb;--rose:#8b4262;--rosebg:#f7e5ed;--shadow:0 8px 28px rgba(20,45,36,.06)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;padding:22px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:#183c32;color:#fff;display:grid;place-items:center;font-size:22px}.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:750}.brand h1{font-size:22px;line-height:1.2;margin:2px 0}.header-date{text-align:right;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:5px;background:#e9ede7;border-radius:14px;margin-bottom:18px}.tab{border:0;background:transparent;color:#53615a;padding:10px 15px;border-radius:10px;font-weight:700;white-space:nowrap}.tab.active{background:#fff;color:var(--ink);box-shadow:0 2px 8px #142d2410}
+.view{display:none}.view.active{display:block}.hero{background:#173b31;color:white;border-radius:22px;padding:23px;margin-bottom:18px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:210px;height:210px;border:1px solid #ffffff1c;border-radius:50%;right:-55px;top:-95px;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff06}.hero h2{margin:4px 0 7px;font-size:clamp(22px,4vw,30px);letter-spacing:-.03em}.hero p{margin:0;color:#d4e5dd;max-width:650px}.hero-row{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;position:relative;z-index:1}.hero .datepill{display:inline-block;border:1px solid #ffffff40;border-radius:999px;padding:5px 10px;font-size:12px;margin-bottom:7px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}.pillar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);min-width:0}.pillar-top{display:flex;align-items:center;gap:9px;margin-bottom:12px}.pillar-icon{width:37px;height:37px;display:grid;place-items:center;border-radius:12px;font-size:19px}.health .pillar-icon{background:var(--green2)}.wealth .pillar-icon{background:var(--goldbg)}.self .pillar-icon{background:var(--bluebg)}.family .pillar-icon{background:var(--rosebg)}.pillar h3{font-size:15px;margin:0}.score{font-size:30px;letter-spacing:-.04em;font-weight:800;line-height:1.2}.score small{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:0}.bar{height:7px;border-radius:99px;background:#edf0eb;overflow:hidden;margin:12px 0 8px}.bar span{display:block;height:100%;width:0;background:var(--green);border-radius:99px;transition:width .3s}.pillar .sub{font-size:12px;color:var(--muted)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow);margin-bottom:18px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:15px}.panel h2{font-size:18px;margin:0 0 4px;letter-spacing:-.02em}.muted{color:var(--muted)}.small{font-size:12px}.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 15px;font-weight:750}.primary{background:var(--green);color:white}.primary:hover{background:#194b3b}.secondary{background:#edf1ec;color:#25352e}.danger{background:#f8e7e7;color:#8a3434}.primary:disabled{opacity:.45;cursor:not-allowed}
+.question-list{display:grid;gap:10px}.qgroup{border:1px solid var(--line);border-radius:15px;padding:14px}.qgroup-head{display:flex;align-items:center;gap:9px;margin-bottom:9px}.qgroup-head strong{font-size:14px}.qgroup-head .tag{font-size:11px;color:var(--muted);margin-left:auto}.question{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid #eff1ed}.question:first-of-type{border-top:0}.question-text{font-size:14px}.choices{display:flex;gap:6px;flex-shrink:0}.choice{border:1px solid #dfe5df;background:#fff;border-radius:9px;padding:7px 11px;min-width:48px;color:#56625c;font-size:12px;font-weight:800}.choice.selected.yes{background:#dff2e6;border-color:#a6d8b9;color:#1d6741}.choice.selected.no{background:#f7e8e6;border-color:#e7c1bc;color:#97483e}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}.notice{padding:11px 13px;background:#f5f7f3;border-radius:12px;color:var(--muted);font-size:12px;margin-top:12px}.result{display:none;background:#edf6ef;border:1px solid #cce4d2;border-radius:16px;padding:16px;margin-top:16px}.result.show{display:block}.result h3{margin:0 0 5px}.result strong.big{font-size:28px}.result p{margin:5px 0;color:#4d6256}
+.two{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:14px;background:#f6f8f4;border-radius:14px}.stat .num{font-size:24px;font-weight:800;letter-spacing:-.03em}.stat .label{font-size:12px;color:var(--muted)}.history-list{display:grid;gap:9px}.history-row{display:grid;grid-template-columns:92px 1fr 52px;align-items:center;gap:10px;font-size:13px}.history-date{color:var(--muted)}.history-bar{height:9px;background:#edf0eb;border-radius:99px;overflow:hidden}.history-bar span{height:100%;display:block;background:var(--green);border-radius:99px}.history-score{text-align:right;font-weight:800}.empty{padding:22px;text-align:center;color:var(--muted);background:#f7f8f5;border-radius:14px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.dayname{text-align:center;font-size:11px;color:var(--muted);padding:5px}.daycell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;flex-direction:column;border-radius:9px;background:#f2f4ef;font-size:12px;position:relative}.daycell .dot{width:5px;height:5px;border-radius:50%;background:var(--green);margin-top:3px}.daycell.emptycell{background:transparent}.daycell.today{outline:2px solid var(--green);outline-offset:-2px}.daycell.good{background:#dff0e4}.daycell.mid{background:#f8efd9}.daycell.low{background:#f7e5e2}.rank{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;background:#edf1ec}.rank.gold{background:#f8efd9;color:#765315}.rank.green{background:#dff0e4;color:#236444}.rank.blue{background:#e5eefb;color:#315b8e}
+input[type=date],select{border:1px solid var(--line);background:#fff;padding:9px 10px;border-radius:10px;color:var(--ink)}.footer{text-align:center;color:#77827b;font-size:11px;padding:8px}.settings-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media(max-width:780px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.hero-row{align-items:flex-start;flex-direction:column}.header-date{display:none}}
+@media(max-width:440px){.app{padding:15px 11px 32px}.panel{padding:14px}.grid{gap:8px}.pillar{padding:12px}.score{font-size:27px}.question{align-items:flex-start;flex-direction:column;gap:8px}.choices{width:100%}.choice{flex:1}.history-row{grid-template-columns:72px 1fr 40px}.brand h1{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><div class="logo">✦</div><div><div class="eyebrow">Your personal life dashboard</div><h1>Four Pillars</h1></div></div>
+  <div class="header-date" id="headerDate"></div>
+</header>
+<nav class="tabs" aria-label="Main navigation">
+  <button class="tab active" data-view="today">Daily check-in</button>
+  <button class="tab" data-view="dashboard">Dashboard</button>
+  <button class="tab" data-view="monthly">Monthly</button>
+  <button class="tab" data-view="yearly">Yearly</button>
+  <button class="tab" data-view="data">Data & settings</button>
+</nav>
+
+<section class="view active" id="view-today">
+  <div class="hero"><div class="hero-row"><div><span class="datepill" id="todayPill">TODAY'S CHECK-IN</span><h2>Balance, not perfection.</h2><p>Answer a few simple Yes/No questions about how you lived today. Every “No” is information—not a failure.</p></div><button class="primary" id="jumpQuestions">Start check-in ↓</button></div></div>
+  <div class="grid" id="todayPillars"></div>
+  <div class="panel" id="checkinPanel">
+    <div class="panel-head"><div><h2>Evening reflection</h2><div class="muted small">A short review of your four pillars, including food and compassion.</div></div><input type="date" id="checkDate" aria-label="Check-in date"></div>
+    <div class="question-list" id="questions"></div>
+    <div class="actions"><button class="primary" id="saveCheckin">Save today's scores</button><button class="secondary" id="clearAnswers">Clear answers</button><span class="muted small" id="saveStatus" aria-live="polite"></span></div>
+    <div class="result" id="dailyResult" aria-live="polite"></div>
+    <div class="notice">Honest answers help you spot patterns. A “No” can mean the day was difficult, priorities changed, or a system needs adjustment. Your score is a reflection tool, not a measure of your worth.</div>
+  </div>
+</section>
+
+<section class="view" id="view-dashboard">
+  <div class="hero"><div class="hero-row"><div><span class="datepill">YOUR LIFE AXIS</span><h2>Are all four pillars being cared for?</h2><p>Look for balance over time—not a perfect score every day.</p></div><div><div class="eyebrow" style="color:#c9ded4">Overall average</div><div style="font-size:34px;font-weight:850" id="overallScore">—</div></div></div></div>
+  <div class="grid" id="dashboardPillars"></div>
+  <div class="two">
+    <div class="panel"><div class="panel-head"><div><h2>Recent daily scores</h2><div class="muted small">Your last 14 calendar days</div></div></div><div class="history-list" id="recentHistory"></div></div>
+    <div class="panel"><h2>Balance snapshot</h2><p class="muted small">A simple view of how evenly the four pillars are progressing.</p><div id="balanceSnapshot"></div></div>
+  </div>
+</section>
+
+<section class="view" id="view-monthly">
+  <div class="panel"><div class="panel-head"><div><h2>Monthly performance</h2><div class="muted small">Choose a month to review your consistency and pillar balance.</div></div><input type="month" id="monthPicker"></div>
+    <div class="stats" id="monthStats"></div><div style="height:18px"></div><div class="grid" id="monthPillars"></div><h2 style="margin:18px 0 10px">Daily activity calendar</h2><div class="calendar" id="monthCalendar"></div><div class="notice">Calendar colors: green = 80% or above, gold = 60–79%, red = below 60%. Blank days have no saved check-in.</div>
+  </div>
+  <div class="panel"><h2>Monthly notes</h2><p class="muted small">What helped? What got in the way? What is one small adjustment for next month?</p><textarea id="monthNote" rows="3" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;resize:vertical" placeholder="Write a short reflection…"></textarea><div class="actions"><button class="primary" id="saveMonthNote">Save reflection</button><span id="noteStatus" class="muted small"></span></div></div>
+</section>
+
+<section class="view" id="view-yearly">
+  <div class="panel"><div class="panel-head"><div><h2>Yearly performance</h2><div class="muted small">A long-term view of your life balance.</div></div><select id="yearPicker" aria-label="Choose year"></select></div>
+    <div class="stats" id="yearStats"></div><div style="height:18px"></div><div class="grid" id="yearPillars"></div><h2 style="margin:18px 0 10px">Month-by-month progress</h2><div class="history-list" id="yearHistory"></div>
+  </div>
+  <div class="panel"><h2>Your yearly review</h2><p class="muted small">What pillar was neglected most? What changed your life for the better? What do you want to protect next year?</p><textarea id="yearNote" rows="4" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;resize:vertical" placeholder="Your reflection…"></textarea><div class="actions"><button class="primary" id="saveYearNote">Save yearly reflection</button><span id="yearNoteStatus" class="muted small"></span></div></div>
+</section>
+
+<section class="view" id="view-data">
+  <div class="panel"><h2>Data & privacy</h2><p class="muted">Your check-ins are saved in this browser on this device using local storage. They are not sent to a server. Clearing browser data or using a different browser/device may remove or hide your records, so export a backup periodically.</p>
+    <div class="actions"><button class="primary" id="exportData">Export backup (JSON)</button><label class="secondary" for="importFile" style="display:inline-flex;align-items:center;cursor:pointer">Import backup</label><input type="file" id="importFile" accept=".json,application/json" hidden><button class="secondary" id="exportCsv">Export scores (CSV)</button></div><div id="dataStatus" class="notice" style="display:none"></div>
+  </div>
+  <div class="panel"><h2>Scoring rules</h2><p class="muted">Each Yes earns one point. Pillar scores are the percentage of Yes answers within that pillar. The daily total is the average of the four pillar percentages, so every pillar has equal weight—even if one has more questions.</p><p class="muted">Ranks: <span class="rank green">A · 85–100</span> <span class="rank blue">B · 70–84</span> <span class="rank">C · 55–69</span> <span class="rank">D · 40–54</span> <span class="rank">E · below 40</span></p><p class="muted">Missing answers are treated as unanswered, not automatically as No. A day is scored only after you save it. Compassion includes both kindness to others and to yourself.</p></div>
+  <div class="panel"><h2>Reset local data</h2><p class="muted">This permanently deletes saved check-ins and reflections from this browser. Export a backup first if you may want your history later.</p><button class="danger" id="resetData">Delete all local data</button></div>
+</section>
+<div class="footer">FOUR PILLARS · HEALTH · WEALTH · SELF · FAMILY · One life, cared for in all dimensions.</div>
+</div>
+<script>
+(() => {
+const KEY='fourPillarsLifeTracker_v1';
+const pillars=[
+ {id:'health',name:'Health',icon:'♥',color:'green',questions:[
+  ['move','Did I move my body or exercise today, even briefly?'],
+  ['food','Did I make mostly nourishing food choices today?'],
+  ['water','Did I drink enough water for my needs today?'],
+  ['sleep','Did I protect a reasonable sleep routine last night?'],
+  ['sit','Did I break up long periods of sitting?']
+ ]},
+ {id:'wealth',name:'Wealth',icon:'↗',color:'gold',questions:[
+  ['work','Did I make meaningful progress on an important work goal?'],
+  ['focus','Did I protect some focused time instead of reacting all day?'],
+  ['money','Did I make a thoughtful financial choice or avoid needless spending?'],
+  ['boundary','Did I maintain a reasonable boundary around work when possible?']
+ ]},
+ {id:'self',name:'Self',icon:'✦',color:'blue',questions:[
+  ['learn','Did I learn or practice something important to my growth?'],
+  ['dream','Did I take one small step toward a personal dream?'],
+  ['reflect','Did I pause to reflect instead of running on autopilot?'],
+  ['selfkind','Did I speak to myself with patience rather than harsh self-criticism?'],
+  ['values','Did I act in line with my values, even when it was inconvenient?']
+ ]},
+ {id:'family',name:'Family',icon:'⌂',color:'rose',questions:[
+  ['present','Was I genuinely present with my children or loved ones?'],
+  ['listen','Did I listen respectfully to someone important to me?'],
+  ['contribute','Did I contribute to family life in a useful way?'],
+  ['connect','Did I make a meaningful connection rather than only handle logistics?']
+ ]}
+];
+const allQuestions=()=>pillars.flatMap(p=>p.questions.map(q=>({id:q[0],text:q[1],pillar:p.id})));
+let data=loadData();
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||{days:{},monthNotes:{},yearNotes:{}}}catch(e){return {days:{},monthNotes:{},yearNotes:{}}}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data))}
+function dateKey(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function parseDate(k){const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d,12)}
+function prettyDate(k,opts={weekday:'short',month:'short',day:'numeric',year:'numeric'}){return parseDate(k).toLocaleDateString(undefined,opts)}
+function clamp(n,min,max){return Math.max(min,Math.min(max,n))}
+function scoreDay(day){if(!day||!day.answers)return null;const qs=allQuestions();const answered=qs.filter(q=>day.answers[q.id]==='yes'||day.answers[q.id]==='no');if(!answered.length)return null;const ps={};pillars.forEach(p=>{const pqs=p.questions;const aa=pqs.filter(q=>day.answers[q[0]]==='yes'||day.answers[q[0]]==='no');ps[p.id]=aa.length?Math.round(100*aa.filter(q=>day.answers[q[0]]==='yes').length/aa.length):null});const vals=Object.values(ps).filter(v=>v!==null);return {overall:vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null,pillars:ps,answered:answered.length,total:qs.length,yes:answered.filter(q=>day.answers[q.id]==='yes').length}}
+function rank(n){if(n>=85)return {letter:'A',label:'Strong balance',cls:'green'};if(n>=70)return {letter:'B',label:'Good progress',cls:'blue'};if(n>=55)return {letter:'C',label:'Building balance',cls:''};if(n>=40)return {letter:'D',label:'Needs attention',cls:''};return {letter:'E',label:'Reset gently',cls:''}}
+function scorePillarsForDays(days){const out={};pillars.forEach(p=>{const vals=days.map(d=>scoreDay(d)?.pillars[p.id]).filter(v=>v!==null&&v!==undefined);out[p.id]=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):null});return out}
+function dayEntries(keys){return keys.map(k=>({key:k,day:data.days[k],score:scoreDay(data.days[k])})).filter(x=>x.score)}
+function monthKeys(year,month){const n=new Date(year,month+1,0).getDate();return Array.from({length:n},(_,i)=>`${year}-${String(month+1).padStart(2,'0')}-${String(i+1).padStart(2,'0')}`)}
+function yearMonthKeys(year,month){return monthKeys(year,month)}
+function allKeys(){return Object.keys(data.days).sort()}
+function avg(vals){const v=vals.filter(x=>x!==null&&x!==undefined);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function pillarCard(p,score,subtitle=''){const shown=score===null||score===undefined?'—':score+'%';return `<div class="pillar ${p.id}"><div class="pillar-top"><div class="pillar-icon">${p.icon}</div><h3>${p.name}</h3></div><div class="score">${shown}</div><div class="bar"><span style="width:${score??0}%;background:${p.id==='health'?'#2e7659':p.id==='wealth'?'#b28632':p.id==='self'?'#4c79b7':'#b45d80'}"></span></div><div class="sub">${subtitle|| (score===null||score===undefined?'No check-in yet':score>=80?'Well supported':score>=60?'Room to strengthen':'Needs gentle attention')}</div></div>`}
+function setTab(name){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.view===name));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+name));if(name==='dashboard')renderDashboard();if(name==='monthly')renderMonth();if(name==='yearly')renderYear()}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.view)));
+document.getElementById('headerDate').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'});
+document.getElementById('todayPill').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}).toUpperCase();
+const checkDate=document.getElementById('checkDate');checkDate.value=dateKey();
+function renderQuestions(){const key=checkDate.value||dateKey();const existing=data.days[key];const answers=existing?.answers||{};document.getElementById('questions').innerHTML=pillars.map(p=>`<div class="qgroup"><div class="qgroup-head"><div class="pillar-icon" style="background:${p.id==='health'?'#dcefe5':p.id==='wealth'?'#f8efd9':p.id==='self'?'#e5eefb':'#f7e5ed'}">${p.icon}</div><strong>${p.name}</strong><span class="tag">${p.questions.length} questions</span></div>${p.questions.map(([id,text])=>`<div class="question"><div class="question-text">${esc(text)}</div><div class="choices" role="group" aria-label="${esc(text)}"><button class="choice ${answers[id]==='yes'?'selected yes':''}" data-q="${id}" data-a="yes" aria-pressed="${answers[id]==='yes'}">Yes</button><button class="choice ${answers[id]==='no'?'selected no':''}" data-q="${id}" data-a="no" aria-pressed="${answers[id]==='no'}">No</button></div></div>`).join('')}</div>`).join('');
+ document.querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>{const q=b.dataset.q,a=b.dataset.a;const k=checkDate.value||dateKey();if(!data.days[k])data.days[k]={answers:{}};data.days[k].answers[q]=a;renderQuestions();document.getElementById('saveStatus').textContent='Answer selected — save to record your score.';}));
+ document.getElementById('dailyResult').classList.remove('show');document.getElementById('saveStatus').textContent=existing?'Saved check-in loaded.':'';
+}
+checkDate.addEventListener('change',renderQuestions);
+document.getElementById('jumpQuestions').addEventListener('click',()=>document.getElementById('checkinPanel').scrollIntoView({behavior:'smooth',block:'start'}));
+function renderToday(){const key=checkDate.value||dateKey();const s=scoreDay(data.days[key]);document.getElementById('todayPillars').innerHTML=pillars.map(p=>pillarCard(p,s?.pillars[p.id]??null)).join('');}
+document.getElementById('saveCheckin').addEventListener('click',()=>{const key=checkDate.value||dateKey();const d=data.days[key]||{answers:{}};d.answers=d.answers||{};const n=allQuestions().filter(q=>d.answers[q.id]==='yes'||d.answers[q.id]==='no').length;if(!n){document.getElementById('saveStatus').textContent='Answer at least one question before saving.';return}d.updatedAt=new Date().toISOString();data.days[key]=d;persist();renderQuestions();renderToday();const s=scoreDay(d),r=rank(s.overall);const result=document.getElementById('dailyResult');result.classList.add('show');result.innerHTML=`<h3>Your daily rank: <span class="rank ${r.cls}">${r.letter} · ${r.label}</span></h3><strong class="big">${s.overall}%</strong><p>You answered ${s.answered} of ${s.total} questions. Each pillar has equal weight.</p><p>${s.overall>=85?'Strong day. Notice what helped you maintain balance.':s.overall>=70?'Good progress. Look for one small improvement tomorrow.':s.overall>=55?'You are building awareness. Choose one pillar to support tomorrow.':'Today may have been demanding. Choose one small, kind reset for tomorrow.'}</p><div class="grid" style="margin:12px 0 0">${pillars.map(p=>pillarCard(p,s.pillars[p.id])).join('')}</div>`;document.getElementById('saveStatus').textContent='Saved on this device.';});
+document.getElementById('clearAnswers').addEventListener('click',()=>{const key=checkDate.value||dateKey();if(data.days[key]){delete data.days[key];persist()}renderQuestions();renderToday();document.getElementById('saveStatus').textContent='Answers cleared.';});
+function renderDashboard(){const entries=dayEntries(allKeys());const recent=entries.filter(x=>x.key<=dateKey()).slice(-14);const overall=avg(entries.map(x=>x.score.overall));document.getElementById('overallScore').textContent=overall===null?'—':overall+'%';const ps=scorePillarsForDays(entries.map(x=>x.day));document.getElementById('dashboardPillars').innerHTML=pillars.map(p=>pillarCard(p,ps[p.id],ps[p.id]===null?'No saved data':`${entries.length} saved day${entries.length===1?'':'s'} averaged`)).join('');
+ document.getElementById('recentHistory').innerHTML=recent.length?recent.slice().reverse().map(x=>`<div class="history-row"><div class="history-date">${prettyDate(x.key,{month:'short',day:'numeric'})}</div><div class="history-bar"><span style="width:${x.score.overall}%"></span></div><div class="history-score">${x.score.overall}%</div></div>`).join(''):'<div class="empty">Your saved daily check-ins will appear here.</div>';
+ const valid=Object.values(ps).filter(v=>v!==null);const spread=valid.length?Math.max(...valid)-Math.min(...valid):null;const weakest=pillars.filter(p=>ps[p.id]!==null).sort((a,b)=>ps[a.id]-ps[b.id])[0];document.getElementById('balanceSnapshot').innerHTML=entries.length?`<div class="stats"><div class="stat"><div class="num">${entries.length}</div><div class="label">Check-in days</div></div><div class="stat"><div class="num">${spread===null?'—':spread+' pts'}</div><div class="label">Pillar score gap</div></div><div class="stat"><div class="num">${entries.filter(x=>x.score.overall>=85).length}</div><div class="label">A-rank days</div></div></div><p class="muted small" style="margin-top:14px">${weakest?'Lowest-scoring pillar in your saved history: <strong>'+weakest.name+'</strong>. Consider one practical support for it this week.':'Save check-ins to discover your patterns.'}</p>`:'<div class="empty">No scores yet. Start with tonight’s check-in.</div>';
+}
+let monthPicker=document.getElementById('monthPicker');let now=new Date();monthPicker.value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;monthPicker.addEventListener('change',renderMonth);
+function renderMonth(){const v=monthPicker.value||`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`, [y,m]=v.split('-').map(Number),keys=monthKeys(y,m-1),entries=dayEntries(keys.filter(k=>data.days[k]));const scores=entries.map(x=>x.score.overall);const ps=scorePillarsForDays(entries.map(x=>x.day));document.getElementById('monthStats').innerHTML=[['Average score',avg(scores)===null?'—':avg(scores)+'%'],['Check-in days',entries.length],['A-rank days',entries.filter(x=>x.score.overall>=85).length]].map(([l,n])=>`<div class="stat"><div class="num">${n}</div><div class="label">${l}</div></div>`).join('');document.getElementById('monthPillars').innerHTML=pillars.map(p=>pillarCard(p,ps[p.id])).join('');
+ const first=new Date(y,m-1,1).getDay();document.getElementById('monthCalendar').innerHTML=['S','M','T','W','T','F','S'].map(d=>`<div class="dayname">${d}</div>`).join('')+Array.from({length:first},()=>'<div class="daycell emptycell"></div>').join('')+keys.map(k=>{const s=scoreDay(data.days[k])?.overall;const cls=s===null||s===undefined?'':s>=80?'good':s>=60?'mid':'low';return `<div class="daycell ${cls} ${k===dateKey()?'today':''}" title="${k}${s!==undefined&&s!==null?' · '+s+'%':''}">${Number(k.slice(-2))}${s!==undefined&&s!==null?'<span class="dot"></span>':''}</div>`}).join('');
+ const nk=v;document.getElementById('monthNote').value=data.monthNotes[nk]||'';document.getElementById('noteStatus').textContent='';}
+document.getElementById('saveMonthNote').addEventListener('click',()=>{data.monthNotes[monthPicker.value]=document.getElementById('monthNote').value;persist();document.getElementById('noteStatus').textContent='Reflection saved locally.'});
+const yearPicker=document.getElementById('yearPicker');for(let y=now.getFullYear()-3;y<=now.getFullYear()+1;y++){const o=document.createElement('option');o.value=y;o.textContent=y;if(y===now.getFullYear())o.selected=true;yearPicker.appendChild(o)}yearPicker.addEventListener('change',renderYear);
+function renderYear(){const y=Number(yearPicker.value||now.getFullYear());const keys=Array.from({length:12},(_,m)=>monthKeys(y,m)).flat();const entries=dayEntries(keys.filter(k=>data.days[k]));const ps=scorePillarsForDays(entries.map(x=>x.day));document.getElementById('yearStats').innerHTML=[['Average score',avg(entries.map(x=>x.score.overall))===null?'—':avg(entries.map(x=>x.score.overall))+'%'],['Check-in days',entries.length],['Coverage',Math.round(entries.length/(y===now.getFullYear()?Math.max(1,Math.floor((Date.now()-new Date(y,0,1))/(86400000))+1):365)*100)+'%']].map(([l,n])=>`<div class="stat"><div class="num">${n}</div><div class="label">${l}</div></div>`).join('');document.getElementById('yearPillars').innerHTML=pillars.map(p=>pillarCard(p,ps[p.id])).join('');
+ const months=Array.from({length:12},(_,m)=>{const es=dayEntries(monthKeys(y,m).filter(k=>data.days[k]));return {m,score:avg(es.map(x=>x.score.overall)),n:es.length}});document.getElementById('yearHistory').innerHTML=months.map(x=>`<div class="history-row"><div class="history-date">${new Date(y,x.m,1).toLocaleDateString(undefined,{month:'long'})}</div><div class="history-bar"><span style="width:${x.score??0}%;opacity:${x.n?1:.2}"></span></div><div class="history-score">${x.score===null?'—':x.score+'%'}</div></div>`).join('');document.getElementById('yearNote').value=data.yearNotes[String(y)]||'';document.getElementById('yearNoteStatus').textContent=''}
+document.getElementById('saveYearNote').addEventListener('click',()=>{data.yearNotes[String(yearPicker.value)]=document.getElementById('yearNote').value;persist();document.getElementById('yearNoteStatus').textContent='Yearly reflection saved locally.'});
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+document.getElementById('exportData').addEventListener('click',()=>{download('four-pillars-backup-'+dateKey()+'.json',JSON.stringify(data,null,2),'application/json');showDataStatus('Backup exported. Keep it somewhere safe.')});
+document.getElementById('exportCsv').addEventListener('click',()=>{const rows=[['date','overall_percent','rank','health_percent','wealth_percent','self_percent','family_percent','answered','yes_answers']];allKeys().forEach(k=>{const s=scoreDay(data.days[k]);if(s)rows.push([k,s.overall,rank(s.overall).letter,...pillars.map(p=>s.pillars[p.id]??''),s.answered,s.yes])});const csv=rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download('four-pillars-scores-'+dateKey()+'.csv',csv,'text/csv');showDataStatus('Score history exported as CSV.')});
+document.getElementById('importFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||typeof obj.days!=='object')throw new Error('Invalid backup');if(!confirm('Import this backup? Imported records with the same date will replace local records.'))return;data={days:{...data.days,...obj.days},monthNotes:{...data.monthNotes,...(obj.monthNotes||{})},yearNotes:{...data.yearNotes,...(obj.yearNotes||{})}};persist();renderQuestions();renderToday();renderDashboard();renderMonth();renderYear();showDataStatus('Backup imported.');}catch(err){showDataStatus('Could not import this file. Choose a valid Four Pillars JSON backup.')}e.target.value=''});
+function showDataStatus(t){const el=document.getElementById('dataStatus');el.style.display='block';el.textContent=t}
+document.getElementById('resetData').addEventListener('click',()=>{if(confirm('Delete all Four Pillars check-ins and reflections from this browser? This cannot be undone.')){localStorage.removeItem(KEY);data={days:{},monthNotes:{},yearNotes:{}};renderQuestions();renderToday();renderDashboard();renderMonth();renderYear();showDataStatus('All local data deleted.')}});
+renderQuestions();renderToday();renderDashboard();renderMonth();renderYear();
+})();
+</script>
+</body>
+</html>
